@@ -37,7 +37,7 @@ interface CartItem {
 export default function Index() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [activeSection, setActiveSection] = useState('catalog');
+  const [activeSection, setActiveSection] = useState('главная');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [selectedCollection, setSelectedCollection] = useState<string>('all');
@@ -346,10 +346,128 @@ export default function Index() {
         </div>
       </header>
 
-      {(activeSection === 'каталог' || activeSection === 'главная') && (
+      {activeSection === 'главная' && (
+        <main className="container mx-auto px-4 py-16">
+          <div className="text-center mb-16">
+            <h2 className="text-6xl font-light mb-6">Коллекция ароматов ручной работы</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Премиальные свечи из натурального воска с авторскими композициями эфирных масел
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <Card className="overflow-hidden hover:shadow-2xl transition-shadow">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="relative aspect-square overflow-hidden bg-muted group">
+                  <img
+                    src="https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/79ee0abe-6b3b-4c38-ae9c-18b44f5b0d3e.jpg"
+                    alt="Premium Set"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 group-hover:opacity-0 absolute inset-0"
+                  />
+                  <img
+                    src="https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg"
+                    alt="Premium Set Burning"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 opacity-0 group-hover:opacity-100 absolute inset-0"
+                  />
+                  <Badge className="absolute top-6 left-6 bg-primary text-primary-foreground text-sm px-4 py-2">
+                    Лимитированная коллекция
+                  </Badge>
+                </div>
+                
+                <div className="p-12 flex flex-col justify-center">
+                  <h3 className="text-5xl font-light mb-4">The Signature Set</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Эксклюзивный набор из трёх премиальных свечей с уникальными ароматическими композициями. 
+                    Каждая свеча создана вручную из натурального соевого воска с добавлением редких эфирных масел.
+                  </p>
+                  
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center gap-3">
+                      <Icon name="Sparkles" size={20} className="text-primary" />
+                      <span className="text-sm">200 мл каждая свеча</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Icon name="Leaf" size={20} className="text-primary" />
+                      <span className="text-sm">100% натуральный воск</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Icon name="Flame" size={20} className="text-primary" />
+                      <span className="text-sm">До 50 часов горения</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-border pt-6 mb-6">
+                    <p className="text-sm text-muted-foreground mb-3">Ароматы в наборе:</p>
+                    <div className="space-y-2">
+                      <p className="text-sm">• <span className="font-medium">Daryan</span> — кедр, мандарин, бергамот</p>
+                      <p className="text-sm">• <span className="font-medium">Cubilia</span> — жасмин, роза, грейпфрут</p>
+                      <p className="text-sm">• <span className="font-medium">Vanda</span> — орхидея, ваниль, амбра</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Специальная цена</p>
+                      <p className="text-4xl font-light">7 500 ₽</p>
+                      <p className="text-sm text-muted-foreground line-through">8 400 ₽</p>
+                    </div>
+                    <Badge variant="outline" className="text-sm px-3 py-1">
+                      Экономия 900 ₽
+                    </Badge>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button 
+                      className="flex-1" 
+                      size="lg"
+                      onClick={() => {
+                        addToCart(1);
+                        addToCart(2);
+                        addToCart(3);
+                      }}
+                    >
+                      Купить набор
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      onClick={() => setActiveSection('каталог')}
+                    >
+                      Весь каталог
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          <div className="mt-24 text-center">
+            <h3 className="text-3xl font-light mb-8">Почему выбирают LUMIÈRE</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div>
+                <Icon name="Award" size={40} className="mx-auto mb-4 text-primary" />
+                <h4 className="text-xl mb-2">Премиальное качество</h4>
+                <p className="text-sm text-muted-foreground">Только проверенные натуральные компоненты</p>
+              </div>
+              <div>
+                <Icon name="Package" size={40} className="mx-auto mb-4 text-primary" />
+                <h4 className="text-xl mb-2">Изысканная упаковка</h4>
+                <p className="text-sm text-muted-foreground">Каждая свеча — готовый подарок</p>
+              </div>
+              <div>
+                <Icon name="Truck" size={40} className="mx-auto mb-4 text-primary" />
+                <h4 className="text-xl mb-2">Бесплатная доставка</h4>
+                <p className="text-sm text-muted-foreground">По России от 1500 рублей</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
+
+      {activeSection === 'каталог' && (
         <main className="container mx-auto px-4 py-12">
           <div className="text-center mb-12">
-            <h2 className="text-5xl font-light mb-4">Производство ароматических свечей</h2>
+            <h2 className="text-5xl font-light mb-4">Каталог ароматических свечей</h2>
             <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Экологически чистое производство ароматических свечей заключается в использовании натуральных компонентов: воска, эфирных и ароматических масел. 
               В мастерской LUMIÈRE мы тщательно комбинируем ароматы, добавляя их в восковую основу.
