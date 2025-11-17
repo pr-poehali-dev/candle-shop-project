@@ -63,7 +63,7 @@ export default function Index() {
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-light tracking-wider">flame moscow</h1>
+            <h1 className="text-4xl font-light tracking-wider">LUMIÈRE</h1>
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => setActiveSection('search')}>
                 <Icon name="Search" size={20} />
@@ -168,7 +168,7 @@ export default function Index() {
             <h2 className="text-5xl font-light mb-4">Производство ароматических свечей</h2>
             <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Экологически чистое производство ароматических свечей заключается в использовании натуральных компонентов: воска, эфирных и ароматических масел. 
-              В мастерской Flame Moscow мы тщательно комбинируем ароматы, добавляя их в восковую основу.
+              В мастерской LUMIÈRE мы тщательно комбинируем ароматы, добавляя их в восковую основу.
             </p>
           </div>
 
@@ -288,7 +288,7 @@ export default function Index() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-5xl font-light mb-6">О нас</h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Flame Moscow — премиальная мастерская ароматических свечей. 
+              LUMIÈRE — премиальная мастерская ароматических свечей. 
               Мы создаем уникальные композиции, используя только натуральные компоненты 
               и авторские сочетания ароматов. Каждая свеча — это искусство, созданное с любовью 
               и вниманием к деталям.
@@ -432,7 +432,7 @@ export default function Index() {
               <div>
                 <Icon name="Mail" size={24} className="mx-auto mb-2" />
                 <h3 className="text-xl mb-1">Email</h3>
-                <p className="text-muted-foreground">hello@flamemoscow.ru</p>
+                <p className="text-muted-foreground">hello@lumiere.ru</p>
               </div>
               <div className="flex justify-center gap-4 pt-6">
                 <Button variant="outline" size="icon">
@@ -453,7 +453,7 @@ export default function Index() {
       <footer className="border-t border-border mt-16">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-sm text-muted-foreground">
-            <p>© 2025 Flame Moscow. Все права защищены.</p>
+            <p>© 2025 LUMIÈRE. Все права защищены.</p>
             <p className="mt-2">Премиальные ароматические свечи ручной работы</p>
           </div>
         </div>
