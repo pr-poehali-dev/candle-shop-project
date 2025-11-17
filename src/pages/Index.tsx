@@ -644,53 +644,96 @@ export default function Index() {
       </footer>
 
       {orderSuccess && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-500">
-          <div className="bg-background rounded-lg p-12 max-w-md mx-4 text-center animate-in zoom-in-95 duration-700">
-            <div className="relative w-32 h-32 mx-auto mb-8">
-              <div className="absolute inset-0 bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-xl animate-pulse"></div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 animate-in fade-in duration-500">
+          <div className="bg-gradient-to-br from-background via-background to-orange-50/30 rounded-2xl p-12 max-w-md mx-4 text-center animate-in zoom-in-95 duration-700 shadow-2xl border border-orange-200/20">
+            <div className="relative w-40 h-40 mx-auto mb-8">
+              <div className="absolute inset-0 bg-gradient-to-b from-orange-500/40 via-amber-400/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute inset-4 bg-gradient-to-b from-yellow-400/20 via-orange-400/20 to-transparent rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+              
               <svg
                 viewBox="0 0 100 100"
                 className="w-full h-full relative z-10"
               >
-                <ellipse cx="50" cy="80" rx="15" ry="5" fill="hsl(var(--muted))" opacity="0.3" />
-                <rect x="35" y="45" width="30" height="35" rx="2" fill="hsl(var(--muted))" />
+                <ellipse cx="50" cy="85" rx="18" ry="6" fill="#1a1a1a" opacity="0.2" />
+                
+                <defs>
+                  <linearGradient id="candleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#f5f5f0" />
+                    <stop offset="50%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#f5f5f0" />
+                  </linearGradient>
+                  <linearGradient id="flameGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#FF4500" />
+                    <stop offset="30%" stopColor="#FF6B00" />
+                    <stop offset="60%" stopColor="#FFA500" />
+                    <stop offset="100%" stopColor="#FFD700" />
+                  </linearGradient>
+                  <radialGradient id="glowGradient">
+                    <stop offset="0%" stopColor="#FFD700" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#FFA500" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#FF6B00" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                
+                <rect x="32" y="48" width="36" height="37" rx="3" fill="url(#candleGradient)" stroke="#e0e0d0" strokeWidth="0.5" />
+                
+                <ellipse cx="50" cy="48" rx="18" ry="4" fill="#f0f0e8" />
+                
+                <circle cx="50" cy="30" r="25" fill="url(#glowGradient)" opacity="0.6">
+                  <animate attributeName="r" values="25;28;25" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.6;0.8;0.6" dur="2s" repeatCount="indefinite" />
+                </circle>
+                
                 <path
-                  d="M 50 45 Q 45 35, 50 25 Q 55 35, 50 45"
+                  d="M 50 48 Q 44 35, 50 20 Q 56 35, 50 48"
                   fill="url(#flameGradient)"
-                  className="animate-pulse"
-                  style={{ transformOrigin: '50px 45px' }}
+                  opacity="0.95"
+                  style={{ transformOrigin: '50px 48px' }}
                 >
                   <animateTransform
                     attributeName="transform"
                     type="scale"
-                    values="1,1;1.05,0.95;1,1"
-                    dur="1.5s"
+                    values="1,1;1.08,0.92;1,1;1.05,0.95;1,1"
+                    dur="2s"
                     repeatCount="indefinite"
                   />
+                  <animate attributeName="opacity" values="0.95;1;0.95;1;0.95" dur="2s" repeatCount="indefinite" />
                 </path>
-                <ellipse cx="50" cy="46" rx="3" ry="2" fill="#FFA500" opacity="0.8" />
-                <defs>
-                  <linearGradient id="flameGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                    <stop offset="0%" stopColor="#FF6B00" />
-                    <stop offset="50%" stopColor="#FF8C00" />
-                    <stop offset="100%" stopColor="#FFD700" />
-                  </linearGradient>
-                </defs>
+                
+                <ellipse cx="50" cy="48" rx="4" ry="2.5" fill="#FFA500" opacity="0.9">
+                  <animate attributeName="ry" values="2.5;3;2.5" dur="2s" repeatCount="indefinite" />
+                </ellipse>
+                
+                <ellipse cx="50" cy="30" rx="6" ry="8" fill="#FFD700" opacity="0.4">
+                  <animate attributeName="ry" values="8;10;8" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2s" repeatCount="indefinite" />
+                </ellipse>
               </svg>
             </div>
             
-            <h2 className="text-3xl font-light mb-3 text-foreground">Заказ оформлен</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Благодарим за выбор LUMIÈRE
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Мы свяжемся с вами в ближайшее время
-            </p>
-            
-            <div className="mt-6 pt-6 border-t border-border">
-              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <Icon name="Sparkles" size={16} />
-                <span>Ваш заказ уже готовится к отправке</span>
+            <div className="space-y-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 mb-2 animate-in zoom-in duration-700" style={{ animationDelay: '0.3s' }}>
+                <Icon name="Check" size={32} className="text-white" strokeWidth={3} />
+              </div>
+              
+              <h2 className="text-4xl font-light mb-3 text-foreground bg-gradient-to-r from-foreground via-orange-900 to-foreground bg-clip-text">
+                Заказ оформлен
+              </h2>
+              
+              <div className="space-y-2 animate-in fade-in duration-700" style={{ animationDelay: '0.5s' }}>
+                <p className="text-lg text-foreground/80 leading-relaxed">
+                  Благодарим за выбор LUMIÈRE
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Мы свяжемся с вами в ближайшее время
+                </p>
+              </div>
+              
+              <div className="mt-8 pt-6 border-t border-orange-200/30 animate-in fade-in duration-700" style={{ animationDelay: '0.7s' }}>
+                <div className="flex items-center justify-center gap-3 text-sm text-orange-600 font-medium">
+                  <Icon name="Sparkles" size={18} className="text-amber-500" />
+                  <span>Ваш заказ уже готовится к отправке</span>
+                </div>
               </div>
             </div>
           </div>
