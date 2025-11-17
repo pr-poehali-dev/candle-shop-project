@@ -29,9 +29,14 @@ const products: Product[] = [
   { id: 6, name: 'Aurora', price: 3500, volume: '350', category: 'большие', collection: 'Premium', notes: ['удов', 'сандал', 'пачули'], inStock: false, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/5420a367-dc73-416f-bc53-6f72f85915c8.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
 ];
 
+interface CartItem {
+  productId: number;
+  quantity: number;
+}
+
 export default function Index() {
   const [favorites, setFavorites] = useState<number[]>([]);
-  const [cart, setCart] = useState<number[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('catalog');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState([0, 5000]);
@@ -48,18 +53,54 @@ export default function Index() {
   };
 
   const addToCart = (id: number) => {
-    setCart(prev => [...prev, id]);
+    setCart(prev => {
+      const existingItem = prev.find(item => item.productId === id);
+      if (existingItem) {
+        return prev.map(item =>
+          item.productId === id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { productId: id, quantity: 1 }];
+    });
+  };
+
+  const updateQuantity = (id: number, delta: number) => {
+    setCart(prev => {
+      const item = prev.find(item => item.productId === id);
+      if (!item) return prev;
+      
+      const newQuantity = item.quantity + delta;
+      if (newQuantity <= 0) {
+        return prev.filter(item => item.productId !== id);
+      }
+      
+      return prev.map(item =>
+        item.productId === id
+          ? { ...item, quantity: newQuantity }
+          : item
+      );
+    });
+  };
+
+  const removeFromCart = (id: number) => {
+    setCart(prev => prev.filter(item => item.productId !== id));
   };
 
   const submitOrder = async () => {
     setOrderSubmitting(true);
     
-    const cartItems = products.filter(p => cart.includes(p.id)).map(p => ({
-      name: p.name,
-      volume: p.volume,
-      quantity: cart.filter(id => id === p.id).length,
-      price: p.price * cart.filter(id => id === p.id).length
-    }));
+    const cartItems = cart.map(cartItem => {
+      const product = products.find(p => p.id === cartItem.productId);
+      if (!product) return null;
+      return {
+        name: product.name,
+        volume: product.volume,
+        quantity: cartItem.quantity,
+        price: product.price * cartItem.quantity
+      };
+    }).filter(item => item !== null);
     
     const total = cartItems.reduce((sum, item) => sum + item.price, 0);
     
@@ -169,21 +210,55 @@ export default function Index() {
                       <p className="text-muted-foreground text-center py-8">Корзина пуста</p>
                     ) : (
                       <>
-                        {products.filter(p => cart.includes(p.id)).map((p, idx) => (
-                          <div key={idx} className="flex items-center gap-3 border-b pb-3">
-                            <img src={p.image} alt={p.name} className="w-16 h-16 object-cover" />
-                            <div className="flex-1">
-                              <p className="font-medium">{p.name}</p>
-                              <p className="text-sm text-muted-foreground">{p.price} ₽</p>
+                        {cart.map((cartItem) => {
+                          const product = products.find(p => p.id === cartItem.productId);
+                          if (!product) return null;
+                          return (
+                            <div key={cartItem.productId} className="flex items-center gap-3 border-b pb-3">
+                              <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                              <div className="flex-1">
+                                <p className="font-medium">{product.name}</p>
+                                <p className="text-sm text-muted-foreground">{product.price} ₽</p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => updateQuantity(cartItem.productId, -1)}
+                                >
+                                  <Icon name="Minus" size={14} />
+                                </Button>
+                                <span className="w-8 text-center font-medium">{cartItem.quantity}</span>
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => updateQuantity(cartItem.productId, 1)}
+                                >
+                                  <Icon name="Plus" size={14} />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 ml-1"
+                                  onClick={() => removeFromCart(cartItem.productId)}
+                                >
+                                  <Icon name="X" size={14} />
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                         {!showCheckout ? (
                           <div className="pt-4 border-t">
                             <div className="flex justify-between mb-4">
                               <span className="font-medium">Итого:</span>
                               <span className="font-medium">
-                                {products.filter(p => cart.includes(p.id)).reduce((sum, p) => sum + p.price, 0)} ₽
+                                {cart.reduce((sum, item) => {
+                                  const product = products.find(p => p.id === item.productId);
+                                  return sum + (product ? product.price * item.quantity : 0);
+                                }, 0)} ₽
                               </span>
                             </div>
                             <Button className="w-full" onClick={() => setShowCheckout(true)}>Оформить заказ</Button>
