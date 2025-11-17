@@ -47,6 +47,7 @@ export default function Index() {
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [orderSubmitting, setOrderSubmitting] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -120,12 +121,15 @@ export default function Index() {
       });
       
       if (response.ok) {
-        alert('✅ Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.');
-        setCart([]);
-        setShowCheckout(false);
-        setCustomerName('');
-        setCustomerPhone('');
-        setCustomerEmail('');
+        setOrderSuccess(true);
+        setTimeout(() => {
+          setCart([]);
+          setShowCheckout(false);
+          setCustomerName('');
+          setCustomerPhone('');
+          setCustomerEmail('');
+          setOrderSuccess(false);
+        }, 4000);
       } else {
         alert('❌ Ошибка при оформлении заказа. Попробуйте позже.');
       }
@@ -634,6 +638,60 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      {orderSuccess && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-500">
+          <div className="bg-background rounded-lg p-12 max-w-md mx-4 text-center animate-in zoom-in-95 duration-700">
+            <div className="relative w-32 h-32 mx-auto mb-8">
+              <div className="absolute inset-0 bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-xl animate-pulse"></div>
+              <svg
+                viewBox="0 0 100 100"
+                className="w-full h-full relative z-10"
+              >
+                <ellipse cx="50" cy="80" rx="15" ry="5" fill="hsl(var(--muted))" opacity="0.3" />
+                <rect x="35" y="45" width="30" height="35" rx="2" fill="hsl(var(--muted))" />
+                <path
+                  d="M 50 45 Q 45 35, 50 25 Q 55 35, 50 45"
+                  fill="url(#flameGradient)"
+                  className="animate-pulse"
+                  style={{ transformOrigin: '50px 45px' }}
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="scale"
+                    values="1,1;1.05,0.95;1,1"
+                    dur="1.5s"
+                    repeatCount="indefinite"
+                  />
+                </path>
+                <ellipse cx="50" cy="46" rx="3" ry="2" fill="#FFA500" opacity="0.8" />
+                <defs>
+                  <linearGradient id="flameGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#FF6B00" />
+                    <stop offset="50%" stopColor="#FF8C00" />
+                    <stop offset="100%" stopColor="#FFD700" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            
+            <h2 className="text-3xl font-light mb-3 text-foreground">Заказ оформлен</h2>
+            <p className="text-muted-foreground leading-relaxed mb-2">
+              Благодарим за выбор LUMIÈRE
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Мы свяжемся с вами в ближайшее время
+            </p>
+            
+            <div className="mt-6 pt-6 border-t border-border">
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Icon name="Sparkles" size={16} />
+                <span>Ваш заказ уже готовится к отправке</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
