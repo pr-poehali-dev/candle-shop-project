@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "POST valid order",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "customerName": "Иван Иванов",
+        "customerPhone": "+7 999 123-45-67",
+        "customerEmail": "ivan@example.com",
+        "items": [
+          {
+            "name": "Daryan",
+            "volume": "200",
+            "quantity": 2,
+            "price": 5600
+          }
+        ],
+        "total": 5600
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

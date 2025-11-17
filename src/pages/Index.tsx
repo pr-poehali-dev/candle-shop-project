@@ -37,6 +37,11 @@ export default function Index() {
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [selectedCollection, setSelectedCollection] = useState<string>('all');
   const [showInStock, setShowInStock] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [orderSubmitting, setOrderSubmitting] = useState(false);
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -44,6 +49,50 @@ export default function Index() {
 
   const addToCart = (id: number) => {
     setCart(prev => [...prev, id]);
+  };
+
+  const submitOrder = async () => {
+    setOrderSubmitting(true);
+    
+    const cartItems = products.filter(p => cart.includes(p.id)).map(p => ({
+      name: p.name,
+      volume: p.volume,
+      quantity: cart.filter(id => id === p.id).length,
+      price: p.price * cart.filter(id => id === p.id).length
+    }));
+    
+    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+    
+    try {
+      const response = await fetch('https://functions.poehali.dev/e3232918-5eed-4bdd-8734-19610ce56953', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerName,
+          customerPhone,
+          customerEmail,
+          items: cartItems,
+          total
+        })
+      });
+      
+      if (response.ok) {
+        alert('✅ Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.');
+        setCart([]);
+        setShowCheckout(false);
+        setCustomerName('');
+        setCustomerPhone('');
+        setCustomerEmail('');
+      } else {
+        alert('❌ Ошибка при оформлении заказа. Попробуйте позже.');
+      }
+    } catch (error) {
+      alert('❌ Ошибка соединения. Проверьте интернет и попробуйте снова.');
+    } finally {
+      setOrderSubmitting(false);
+    }
   };
 
   const filteredProducts = products.filter(p => {
@@ -129,15 +178,67 @@ export default function Index() {
                             </div>
                           </div>
                         ))}
-                        <div className="pt-4 border-t">
-                          <div className="flex justify-between mb-4">
-                            <span className="font-medium">Итого:</span>
-                            <span className="font-medium">
-                              {products.filter(p => cart.includes(p.id)).reduce((sum, p) => sum + p.price, 0)} ₽
-                            </span>
+                        {!showCheckout ? (
+                          <div className="pt-4 border-t">
+                            <div className="flex justify-between mb-4">
+                              <span className="font-medium">Итого:</span>
+                              <span className="font-medium">
+                                {products.filter(p => cart.includes(p.id)).reduce((sum, p) => sum + p.price, 0)} ₽
+                              </span>
+                            </div>
+                            <Button className="w-full" onClick={() => setShowCheckout(true)}>Оформить заказ</Button>
                           </div>
-                          <Button className="w-full">Оформить заказ</Button>
-                        </div>
+                        ) : (
+                          <div className="pt-4 border-t space-y-4">
+                            <h3 className="font-medium text-lg">Контактные данные</h3>
+                            <div>
+                              <label className="text-sm text-muted-foreground">Имя</label>
+                              <input
+                                type="text"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                className="w-full mt-1 px-3 py-2 border border-input rounded-md"
+                                placeholder="Иван Иванов"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm text-muted-foreground">Телефон</label>
+                              <input
+                                type="tel"
+                                value={customerPhone}
+                                onChange={(e) => setCustomerPhone(e.target.value)}
+                                className="w-full mt-1 px-3 py-2 border border-input rounded-md"
+                                placeholder="+7 999 123-45-67"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm text-muted-foreground">Email</label>
+                              <input
+                                type="email"
+                                value={customerEmail}
+                                onChange={(e) => setCustomerEmail(e.target.value)}
+                                className="w-full mt-1 px-3 py-2 border border-input rounded-md"
+                                placeholder="ivan@example.com"
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                className="flex-1"
+                                onClick={() => setShowCheckout(false)}
+                              >
+                                Назад
+                              </Button>
+                              <Button 
+                                className="flex-1"
+                                onClick={submitOrder}
+                                disabled={!customerName || !customerPhone || orderSubmitting}
+                              >
+                                {orderSubmitting ? 'Отправка...' : 'Отправить заказ'}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
