@@ -17,15 +17,16 @@ interface Product {
   notes: string[];
   inStock: boolean;
   image: string;
+  imageBurning: string;
 }
 
 const products: Product[] = [
-  { id: 1, name: 'Daryan', price: 2800, volume: '200', category: 'средние', collection: 'Classic', notes: ['кедр', 'мандарин', 'бергамот'], inStock: true, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
-  { id: 2, name: 'Cubilia', price: 2800, volume: '200', category: 'средние', collection: 'Classic', notes: ['жасмин', 'роза', 'грейпфрут'], inStock: true, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
-  { id: 3, name: 'Vanda', price: 2800, volume: '200', category: 'средние', collection: 'Floral', notes: ['орхидея', 'ваниль', 'амбра'], inStock: true, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
-  { id: 4, name: 'Cora', price: 2800, volume: '200', category: 'средние', collection: 'Floral', notes: ['грейпфрут', 'розовый куст', 'ежевика'], inStock: true, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
-  { id: 5, name: 'Stellar', price: 1800, volume: '120', category: 'малые', collection: 'Mini', notes: ['лимон', 'базилик', 'мята'], inStock: true, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
-  { id: 6, name: 'Aurora', price: 3500, volume: '350', category: 'большие', collection: 'Premium', notes: ['удов', 'сандал', 'пачули'], inStock: false, image: 'https://cdn.poehali.dev/files/7882777b-1891-4a49-b963-b9d5f0af8fa1.png' },
+  { id: 1, name: 'Daryan', price: 2800, volume: '200', category: 'средние', collection: 'Classic', notes: ['кедр', 'мандарин', 'бергамот'], inStock: true, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/79ee0abe-6b3b-4c38-ae9c-18b44f5b0d3e.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
+  { id: 2, name: 'Cubilia', price: 2800, volume: '200', category: 'средние', collection: 'Classic', notes: ['жасмин', 'роза', 'грейпфрут'], inStock: true, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/5420a367-dc73-416f-bc53-6f72f85915c8.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
+  { id: 3, name: 'Vanda', price: 2800, volume: '200', category: 'средние', collection: 'Floral', notes: ['орхидея', 'ваниль', 'амбра'], inStock: true, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/79ee0abe-6b3b-4c38-ae9c-18b44f5b0d3e.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
+  { id: 4, name: 'Cora', price: 2800, volume: '200', category: 'средние', collection: 'Floral', notes: ['грейпфрут', 'розовый куст', 'ежевика'], inStock: true, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/5420a367-dc73-416f-bc53-6f72f85915c8.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
+  { id: 5, name: 'Stellar', price: 1800, volume: '120', category: 'малые', collection: 'Mini', notes: ['лимон', 'базилик', 'мята'], inStock: true, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/79ee0abe-6b3b-4c38-ae9c-18b44f5b0d3e.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
+  { id: 6, name: 'Aurora', price: 3500, volume: '350', category: 'большие', collection: 'Premium', notes: ['удов', 'сандал', 'пачули'], inStock: false, image: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/5420a367-dc73-416f-bc53-6f72f85915c8.jpg', imageBurning: 'https://cdn.poehali.dev/projects/383567ed-8013-4975-95e4-ae4c2370d804/files/0e1166b0-00f9-4637-a2e9-224d45e4d685.jpg' },
 ];
 
 export default function Index() {
@@ -238,7 +239,12 @@ export default function Index() {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 group-hover:opacity-0 absolute inset-0"
+                  />
+                  <img
+                    src={product.imageBurning}
+                    alt={`${product.name} горящая`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-0 group-hover:opacity-100 absolute inset-0"
                   />
                   <button
                     onClick={() => toggleFavorite(product.id)}
