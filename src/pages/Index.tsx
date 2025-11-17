@@ -48,6 +48,7 @@ export default function Index() {
   const [customerEmail, setCustomerEmail] = useState('');
   const [orderSubmitting, setOrderSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -121,7 +122,10 @@ export default function Index() {
       });
       
       if (response.ok) {
-        setOrderSuccess(true);
+        setCartOpen(false);
+        setTimeout(() => {
+          setOrderSuccess(true);
+        }, 300);
         setTimeout(() => {
           setCart([]);
           setShowCheckout(false);
@@ -129,7 +133,7 @@ export default function Index() {
           setCustomerPhone('');
           setCustomerEmail('');
           setOrderSuccess(false);
-        }, 4000);
+        }, 4300);
       } else {
         alert('❌ Ошибка при оформлении заказа. Попробуйте позже.');
       }
@@ -194,7 +198,7 @@ export default function Index() {
                   </div>
                 </SheetContent>
               </Sheet>
-              <Sheet>
+              <Sheet open={cartOpen} onOpenChange={setCartOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
                     <Icon name="ShoppingBag" size={20} />
