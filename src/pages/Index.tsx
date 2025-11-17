@@ -644,11 +644,11 @@ export default function Index() {
       </footer>
 
       {orderSuccess && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 animate-in fade-in duration-500">
-          <div className="bg-gradient-to-br from-background via-background to-orange-50/30 rounded-2xl p-12 max-w-md mx-4 text-center animate-in zoom-in-95 duration-700 shadow-2xl border border-orange-200/20">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 animate-in fade-in duration-500">
+          <div className="bg-background rounded-2xl p-12 max-w-md mx-4 text-center animate-in zoom-in-95 duration-700 shadow-2xl border border-border">
             <div className="relative w-40 h-40 mx-auto mb-8">
-              <div className="absolute inset-0 bg-gradient-to-b from-orange-500/40 via-amber-400/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
-              <div className="absolute inset-4 bg-gradient-to-b from-yellow-400/20 via-orange-400/20 to-transparent rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-amber-300/20 via-orange-300/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute inset-4 bg-gradient-to-b from-amber-200/15 via-orange-200/10 to-transparent rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.3s' }}></div>
               
               <svg
                 viewBox="0 0 100 100"
@@ -712,11 +712,11 @@ export default function Index() {
             </div>
             
             <div className="space-y-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 mb-2 animate-in zoom-in duration-700" style={{ animationDelay: '0.3s' }}>
-                <Icon name="Check" size={32} className="text-white" strokeWidth={3} />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary mb-2 animate-in zoom-in duration-700" style={{ animationDelay: '0.3s' }}>
+                <Icon name="Check" size={32} className="text-primary-foreground" strokeWidth={3} />
               </div>
               
-              <h2 className="text-4xl font-light mb-3 text-foreground bg-gradient-to-r from-foreground via-orange-900 to-foreground bg-clip-text">
+              <h2 className="text-4xl font-light mb-3 text-foreground">
                 Заказ оформлен
               </h2>
               
@@ -729,9 +729,9 @@ export default function Index() {
                 </p>
               </div>
               
-              <div className="mt-8 pt-6 border-t border-orange-200/30 animate-in fade-in duration-700" style={{ animationDelay: '0.7s' }}>
-                <div className="flex items-center justify-center gap-3 text-sm text-orange-600 font-medium">
-                  <Icon name="Sparkles" size={18} className="text-amber-500" />
+              <div className="mt-8 pt-6 border-t border-border animate-in fade-in duration-700" style={{ animationDelay: '0.7s' }}>
+                <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground">
+                  <Icon name="Sparkles" size={18} />
                   <span>Ваш заказ уже готовится к отправке</span>
                 </div>
               </div>
