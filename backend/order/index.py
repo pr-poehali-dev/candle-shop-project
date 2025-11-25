@@ -3,6 +3,8 @@ import os
 import urllib.request
 import urllib.parse
 from typing import Dict, Any
+import psycopg2
+from datetime import datetime
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
@@ -45,6 +47,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
     chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    database_url = os.environ.get('DATABASE_URL')
     
     if not bot_token or not chat_id:
         return {
@@ -55,6 +58,30 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             },
             'body': json.dumps({'error': 'Telegram credentials not configured'})
         }
+    
+    order_id = None
+    if database_url:
+        try:
+            conn = psycopg2.connect(database_url)
+            cursor = conn.cursor()
+            
+            cursor.execute(
+                "INSERT INTO orders (customer_name, customer_phone, customer_email, total) VALUES (%s, %s, %s, %s) RETURNING id",
+                (customer_name, customer_phone, customer_email, total)
+            )
+            order_id = cursor.fetchone()[0]
+            
+            for item in items:
+                cursor.execute(
+                    "INSERT INTO order_items (order_id, product_name, volume, quantity, price) VALUES (%s, %s, %s, %s, %s)",
+                    (order_id, item.get('name'), item.get('volume'), item.get('quantity'), item.get('price'))
+                )
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except Exception as db_error:
+            pass
     
     items_text = '\n'.join([
         f"• {item.get('name')} - {item.get('volume')} мл × {item.get('quantity', 1)} = {item.get('price', 0)} ₽"
