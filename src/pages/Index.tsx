@@ -357,11 +357,11 @@ export default function Index() {
                     )}
                   </Button>
                 </SheetTrigger>
-                <SheetContent>
+                <SheetContent className="flex flex-col">
                   <SheetHeader>
                     <SheetTitle>Корзина</SheetTitle>
                   </SheetHeader>
-                  <div className="mt-6 space-y-4">
+                  <div className="flex-1 overflow-y-auto mt-6 space-y-4">
                     {cart.length === 0 ? (
                       <p className="text-muted-foreground text-center py-8">
                         Корзина пуста
