@@ -139,6 +139,7 @@ export default function Index() {
   const [orderSubmitting, setOrderSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [orderImages, setOrderImages] = useState<string[]>([]);
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
@@ -180,6 +181,36 @@ export default function Index() {
     setCart((prev) => prev.filter((item) => item.productId !== id));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const readers: Promise<string>[] = [];
+
+    for (let i = 0; i < Math.min(files.length, 5); i++) {
+      const file = files[i];
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Файл ' + file.name + ' слишком большой (макс 5 МБ)');
+        continue;
+      }
+
+      const reader = new FileReader();
+      const promise = new Promise<string>((resolve) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+      readers.push(promise);
+    }
+
+    Promise.all(readers).then((results) => {
+      setOrderImages((prev) => [...prev, ...results].slice(0, 5));
+    });
+  };
+
+  const removeImage = (index: number) => {
+    setOrderImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const submitOrder = async () => {
     setOrderSubmitting(true);
 
@@ -212,6 +243,7 @@ export default function Index() {
             customerEmail,
             items: cartItems,
             total,
+            images: orderImages,
           }),
         },
       );
@@ -227,6 +259,7 @@ export default function Index() {
           setCustomerName("");
           setCustomerPhone("");
           setCustomerEmail("");
+          setOrderImages([]);
           setOrderSuccess(false);
         }, 4300);
       } else {
@@ -466,6 +499,44 @@ export default function Index() {
                                 className="w-full mt-1 px-3 py-2 border border-input rounded-md"
                                 placeholder="ivan@example.com"
                               />
+                            </div>
+                            <div>
+                              <label className="text-sm text-muted-foreground flex items-center gap-2">
+                                <Icon name="Image" size={16} />
+                                Прикрепить фото (необязательно)
+                              </label>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageUpload}
+                                className="w-full mt-1 px-3 py-2 border border-input rounded-md text-sm"
+                              />
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Максимум 5 фото, до 5 МБ каждое
+                              </p>
+                              {orderImages.length > 0 && (
+                                <div className="flex gap-2 mt-2 flex-wrap">
+                                  {orderImages.map((img, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="relative w-16 h-16 rounded border border-border overflow-hidden"
+                                    >
+                                      <img
+                                        src={img}
+                                        alt={`Превью ${idx + 1}`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <button
+                                        onClick={() => removeImage(idx)}
+                                        className="absolute top-0 right-0 bg-destructive text-destructive-foreground w-5 h-5 flex items-center justify-center text-xs"
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                             <div className="flex gap-2">
                               <Button
