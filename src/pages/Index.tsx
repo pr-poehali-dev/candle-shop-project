@@ -349,9 +349,9 @@ export default function Index() {
                         </p>
                         <TelegramLoginButton
                           botName={TELEGRAM_BOT_NAME}
-                          onAuth={async (data) => {
-                            await loginWithTelegram(data);
+                          onAuth={(data) => {
                             setLoginOpen(false);
+                            loginWithTelegram(data);
                           }}
                           buttonSize="large"
                         />
