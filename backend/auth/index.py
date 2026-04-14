@@ -36,7 +36,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     if event.get('httpMethod') != 'POST':
         return {'statusCode': 405, 'headers': cors_headers, 'body': json.dumps({'error': 'Method not allowed'})}
 
-    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+    bot_token = os.environ.get('TELEGRAM_AUTH_BOT_TOKEN') or os.environ.get('TELEGRAM_BOT_TOKEN')
     database_url = os.environ.get('DATABASE_URL')
 
     if not bot_token:
