@@ -150,6 +150,7 @@ export default function Index() {
   const [orderSubmitting, setOrderSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const [orderImages, setOrderImages] = useState<string[]>([]);
 
   const toggleFavorite = (id: number) => {
@@ -328,7 +329,7 @@ export default function Index() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Sheet>
+                  <Sheet open={loginOpen} onOpenChange={setLoginOpen}>
                     <SheetTrigger asChild>
                       <Button variant="outline" size="sm" className="flex items-center gap-2">
                         <Icon name="User" size={16} />
@@ -348,7 +349,10 @@ export default function Index() {
                         </p>
                         <TelegramLoginButton
                           botName={TELEGRAM_BOT_NAME}
-                          onAuth={loginWithTelegram}
+                          onAuth={async (data) => {
+                            await loginWithTelegram(data);
+                            setLoginOpen(false);
+                          }}
                           buttonSize="large"
                         />
                         {!TELEGRAM_BOT_NAME && (
