@@ -27,7 +27,7 @@ import Icon from "@/components/ui/icon";
 import { useAuth } from "@/hooks/use-auth";
 import TelegramLoginButton from "@/components/TelegramLoginButton";
 
-const TELEGRAM_BOT_NAME = import.meta.env.VITE_TELEGRAM_BOT_NAME || "";
+const TELEGRAM_BOT_NAME = import.meta.env.VITE_TELEGRAM_BOT_NAME || "sweetshop_auth_bot_bot";
 
 interface Product {
   id: number;

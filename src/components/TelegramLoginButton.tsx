@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 interface TelegramLoginButtonProps {
   botName: string;
@@ -12,6 +12,12 @@ declare global {
   }
 }
 
+// Глобальный реестр — живёт всегда, не зависит от монтирования компонента
+const authCallbacks = new Set<(data: Record<string, string | number>) => void>();
+window.onTelegramAuth = (user) => {
+  authCallbacks.forEach((cb) => cb(user));
+};
+
 export default function TelegramLoginButton({
   botName,
   onAuth,
@@ -21,14 +27,18 @@ export default function TelegramLoginButton({
   const onAuthRef = useRef(onAuth);
   onAuthRef.current = onAuth;
 
-  const stableOnAuth = useCallback((data: Record<string, string | number>) => {
-    onAuthRef.current(data);
+  useEffect(() => {
+    const cb = (data: Record<string, string | number>) => onAuthRef.current(data);
+    authCallbacks.add(cb);
+    return () => { authCallbacks.delete(cb); };
   }, []);
 
   useEffect(() => {
     if (!containerRef.current || !botName) return;
 
-    window.onTelegramAuth = stableOnAuth;
+    // Удаляем старый скрипт если есть
+    const old = containerRef.current.querySelector("script");
+    if (old) old.remove();
 
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
@@ -40,17 +50,7 @@ export default function TelegramLoginButton({
 
     containerRef.current.innerHTML = "";
     containerRef.current.appendChild(script);
+  }, [botName, buttonSize]);
 
-    return () => {
-      delete window.onTelegramAuth;
-    };
-  }, [botName, buttonSize, stableOnAuth]);
-
-  return (
-    <div ref={containerRef}>
-      {!botName && (
-        <span className="text-xs text-muted-foreground">Войти через Telegram</span>
-      )}
-    </div>
-  );
+  return <div ref={containerRef} />;
 }
