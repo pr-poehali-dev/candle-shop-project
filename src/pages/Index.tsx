@@ -16,8 +16,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Slider } from "@/components/ui/slider";
 import Icon from "@/components/ui/icon";
+import { useAuth } from "@/hooks/use-auth";
+import TelegramLoginButton from "@/components/TelegramLoginButton";
+
+const TELEGRAM_BOT_NAME = import.meta.env.VITE_TELEGRAM_BOT_NAME || "";
 
 interface Product {
   id: number;
@@ -125,6 +135,7 @@ interface CartItem {
 }
 
 export default function Index() {
+  const { user, loading: authLoading, loginWithTelegram, logout } = useAuth();
   const [favorites, setFavorites] = useState<number[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState("главная");
@@ -294,6 +305,62 @@ export default function Index() {
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-4xl font-light tracking-wider">LUMIÈRE</h1>
             <div className="flex items-center gap-4">
+              {!authLoading && (
+                user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="flex items-center gap-2 px-2">
+                        {user.photoUrl ? (
+                          <img src={user.photoUrl} alt={user.firstName} className="w-7 h-7 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-medium">
+                            {user.firstName[0]}
+                          </div>
+                        )}
+                        <span className="text-sm hidden sm:inline">{user.firstName}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={logout} className="text-destructive">
+                        <Icon name="LogOut" size={14} className="mr-2" />
+                        Выйти
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <Icon name="User" size={16} />
+                        <span className="hidden sm:inline">Войти</span>
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-80">
+                      <SheetHeader>
+                        <SheetTitle>Войти через Telegram</SheetTitle>
+                      </SheetHeader>
+                      <div className="mt-8 flex flex-col items-center gap-6">
+                        <div className="w-16 h-16 rounded-full bg-[#229ED9] flex items-center justify-center">
+                          <Icon name="Send" size={28} className="text-white" />
+                        </div>
+                        <p className="text-center text-muted-foreground text-sm leading-relaxed">
+                          Войдите через Telegram, чтобы ваши заказы сохранялись и вы могли отслеживать их статус
+                        </p>
+                        <TelegramLoginButton
+                          botName={TELEGRAM_BOT_NAME}
+                          onAuth={loginWithTelegram}
+                          buttonSize="large"
+                        />
+                        {!TELEGRAM_BOT_NAME && (
+                          <p className="text-xs text-muted-foreground text-center">
+                            Требуется настройка бота
+                          </p>
+                        )}
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                )
+              )}
               <Button
                 variant="ghost"
                 size="icon"
